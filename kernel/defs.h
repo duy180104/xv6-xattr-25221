@@ -35,6 +35,10 @@ int             filestat(struct file*, uint64 addr);
 int             filewrite(struct file*, uint64, int n);
 
 // fs.c
+// them ham
+
+void            set_inode_xattr(struct inode*, char*, char*);
+void            get_inode_xattr(struct inode*, char*, char*);
 void            fsinit(int);
 int             dirlink(struct inode*, char*, uint);
 struct inode*   dirlookup(struct inode*, char*, uint*);

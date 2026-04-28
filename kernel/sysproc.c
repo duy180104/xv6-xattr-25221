@@ -107,3 +107,20 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+uint64
+sys_procdump(void)
+{
+  char *mem = kalloc(); 
+  if(mem == 0){
+    printf("Kernel: kalloc failed\n");
+    return -1;
+  }
+  printf("\n[Kernel] Da cap phat 1 trang tai: %p\n", mem);
+  
+  // Goi ham co san cua xv6 de in danh sach proc
+  procdump(); 
+  
+  kfree(mem);
+  printf("[Kernel] Da giai phong bo nho.\n");
+  return 0;
+}

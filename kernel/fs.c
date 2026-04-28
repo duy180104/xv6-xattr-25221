@@ -718,3 +718,24 @@ nameiparent(char *path, char *name)
 {
   return namex(path, 1, name);
 }
+// CODE SAU KHI THEM
+
+// Ghi thuoc tinh mo rong vao inode
+void
+set_inode_xattr(struct inode *ip, char *key, char *val)
+{
+  // Copy key vao inode (toi da 4 bytes bao gom ca ky tu ket thuc \0)
+  safestrcpy(ip->xkey, key, XATTR_KEY_SIZE);
+  // Copy value vao inode (toi da 8 bytes)
+  safestrcpy(ip->xval, val, XATTR_VAL_SIZE);
+  
+  //  Ghi inode da sua tu RAM xuong dia cung
+  iupdate(ip); 
+}
+// Doc thuoc tinh mo rong tu inode
+void
+get_inode_xattr(struct inode *ip, char *key_buf, char *val_buf)
+{
+  safestrcpy(key_buf, ip->xkey, XATTR_KEY_SIZE);
+  safestrcpy(val_buf, ip->xval, XATTR_VAL_SIZE);
+}
