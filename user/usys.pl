@@ -43,3 +43,5 @@ entry("sbrk");
 entry("pause");
 entry("uptime");
 entry("procdump");
+entry("setxattr");
+entry("getxattr");

@@ -503,3 +503,66 @@ sys_pipe(void)
   }
   return 0;
 }
+// Lay metadata tu Inode (Get) da sua loi bo nho - hoan thien
+uint64
+sys_getxattr(void)
+{
+  char path[MAXPATH], key[16], val[64];
+  struct inode *ip;
+  uint64 uval; // Khai báo biến để hứng "địa chỉ" của User-space
+
+  // 1. Kéo tham số từ lệnh người dùng gõ vào
+  // Tham số 0 (path) và 1 (key) là chuỗi nên dùng argstr và kiểm tra lỗi < 0
+  if(argstr(0, path, MAXPATH) < 0 || argstr(1, key, sizeof(key)) < 0)
+    return -1;
+
+  // Tham số 2 là địa chỉ, hàm argaddr trả về void nên chỉ gọi độc lập, không cho vào if
+  argaddr(2, &uval);
+
+  // 2. Tìm file trên ổ đĩa dựa vào đường dẫn
+  if((ip = namei(path)) == 0)
+    return -1;
+
+  // 3. Khóa file lại, gọi hàm Lõi (Tuần 3) để đọc
+  ilock(ip);
+  get_inode_xattr(ip, key, val);
+  iunlockput(ip);
+
+  // 4. Trả kết quả (val) về đúng địa chỉ 'uval' của User space
+  if(copyout(myproc()->pagetable, uval, val, sizeof(val)) < 0)
+    return -1;
+
+  return 0;
+}
+
+// Ghi metadata vào Inode (Set) - BẢN FIX LỖI TRANSACTION
+uint64
+sys_setxattr(void)
+{
+  char path[MAXPATH], key[16], val[64];
+  struct inode *ip;
+
+  // 1. Kéo tham số từ Terminal vào
+  if(argstr(0, path, MAXPATH) < 0 || argstr(1, key, sizeof(key)) < 0 || argstr(2, val, sizeof(val)) < 0)
+    return -1;
+
+  // BẮT ĐẦU TRANSACTION (Xin phép Kernel mở phiên ghi đĩa)
+  begin_op();
+
+  // 2. Tìm file
+  if((ip = namei(path)) == 0){
+    end_op(); // Nếu không tìm thấy file thì phải đóng phiên lại rồi mới thoát
+    return -1;
+  }
+
+  // 3. Khóa file -> Ghi RAM -> Chốt xuống Ổ cứng (iupdate)
+  ilock(ip);
+  set_inode_xattr(ip, key, val);
+  iupdate(ip); // Bây giờ lệnh này đã an toàn tuyệt đối!
+  iunlockput(ip);
+
+  // KẾT THÚC TRANSACTION (Báo Kernel chốt dữ liệu xuống đĩa)
+  end_op();
+
+  return 0;
+}
