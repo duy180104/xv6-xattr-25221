@@ -102,6 +102,7 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
+//them
 extern uint64 sys_setxattr(void);
 extern uint64 sys_getxattr(void);
 
@@ -127,6 +128,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_write]   sys_write,
 [SYS_mknod]   sys_mknod,
 [SYS_unlink]  sys_unlink,
+//them
 [SYS_setxattr]   sys_setxattr,
 [SYS_getxattr]   sys_getxattr,
 

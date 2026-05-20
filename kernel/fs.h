@@ -24,9 +24,15 @@ struct superblock {
 
 #define FSMAGIC 0x10203040
 
-#define NDIRECT 9
+// ===================================================================
+// [DO AN HDH] - NHOM 25221: HOANG NGOC DUY, MINH HIEU, HUY HOANG
+// Tinh nang: Extended Attributes (setxattr & getxattr)
+// ===================================================================
+
+#define NDIRECT 9 
 #define NINDIRECT (BSIZE / sizeof(uint))
 #define MAXFILE (NDIRECT + NINDIRECT)
+// code them vao
 #define XATTR_KEY_SIZE 4
 #define XATTR_VAL_SIZE 8
 
@@ -38,6 +44,8 @@ struct dinode {
   short nlink;          // Number of links to inode in file system
   uint size;            // Size of file (bytes)
   uint addrs[NDIRECT+1];   // Data block addresses
+  //code them vao
+  
   char xkey[XATTR_KEY_SIZE]; // Ten thuoc tinh
   char xval[XATTR_VAL_SIZE]; // Gia tri thuoc tinh
 };

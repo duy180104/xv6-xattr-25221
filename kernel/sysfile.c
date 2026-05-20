@@ -542,10 +542,17 @@ sys_setxattr(void)
   char path[MAXPATH], key[16], val[64];
   struct inode *ip;
 
-  // 1. Kéo tham số từ Terminal vào
   if(argstr(0, path, MAXPATH) < 0 || argstr(1, key, sizeof(key)) < 0 || argstr(2, val, sizeof(val)) < 0)
     return -1;
 
+  // --- DO AN HDH - NHOM 25221: CHAN LOI TRAN BO NHO ---
+  
+if(strlen(key) >= 16 || strlen(val) >= 64){
+  printf("Loi [Tu choi]: Key hoac Value qua dai!\n");
+  return -1;
+}
+// ---------------------------------------------------
+  // ---------------------------------------------------
   // BẮT ĐẦU TRANSACTION (Xin phép Kernel mở phiên ghi đĩa)
   begin_op();
 

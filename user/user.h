@@ -25,6 +25,7 @@ int getpid(void);
 char* sys_sbrk(int,int);
 int pause(int);
 int uptime(void);
+//them
 int setxattr(const char*, const char*, const char*);
 int getxattr(const char*, const char*, char*);
 

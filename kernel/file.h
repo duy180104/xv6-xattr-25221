@@ -27,6 +27,8 @@ struct inode {
   short nlink;
   uint size;
   uint addrs[NDIRECT+1];
+  //code da them
+  
   char xkey[4];       // do dai 4 bytes
   char xval[8];       // do dai 8 bytes
 };

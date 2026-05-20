@@ -237,6 +237,11 @@ iupdate(struct inode *ip)
   dip->nlink = ip->nlink;
   dip->size = ip->size;
   memmove(dip->addrs, ip->addrs, sizeof(ip->addrs));
+
+  // --- THÊM 2 DÒNG NÀY ĐỂ COPY METADATA TỪ RAM XUỐNG ĐĨA ---
+  memmove(dip->xkey, ip->xkey, sizeof(ip->xkey));
+  memmove(dip->xval, ip->xval, sizeof(ip->xval));
+  // ---------------------------------------------------------
   log_write(bp);
   brelse(bp);
 }
@@ -310,6 +315,11 @@ ilock(struct inode *ip)
     ip->nlink = dip->nlink;
     ip->size = dip->size;
     memmove(ip->addrs, dip->addrs, sizeof(ip->addrs));
+
+    // ---> THÊM 2 DÒNG NÀY ĐỂ ĐỌC METADATA TỪ ĐĨA LÊN RAM <---
+    memmove(ip->xkey, dip->xkey, sizeof(ip->xkey));
+    memmove(ip->xval, dip->xval, sizeof(ip->xval));
+    // ---------------------------------------------------------
     brelse(bp);
     ip->valid = 1;
     if(ip->type == 0)
@@ -718,6 +728,7 @@ nameiparent(char *path, char *name)
 {
   return namex(path, 1, name);
 }
+
 // CODE SAU KHI THEM
 
 // Ghi thuoc tinh mo rong vao inode

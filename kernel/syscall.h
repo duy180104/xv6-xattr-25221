@@ -21,5 +21,6 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_procdump 22
+//them
 #define SYS_setxattr 22
 #define SYS_getxattr 23
