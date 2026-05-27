@@ -148,7 +148,7 @@ UPROGS=\
 	$U/_proctest\
 	$U/_setxattr\
 	$U/_getxattr\
-
+	$U/_testxattr
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
 

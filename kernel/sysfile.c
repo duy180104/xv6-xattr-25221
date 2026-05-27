@@ -547,7 +547,7 @@ sys_setxattr(void)
 
   // --- DO AN HDH - NHOM 25221: CHAN LOI TRAN BO NHO ---
   
-if(strlen(key) >= 16 || strlen(val) >= 64){
+if(strlen(key) >= 4 || strlen(val) >= 8){
   printf("Loi [Tu choi]: Key hoac Value qua dai!\n");
   return -1;
 }
